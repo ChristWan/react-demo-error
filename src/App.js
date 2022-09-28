@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useState} from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const useUpdate = (fn, dep) => {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    setCount(x => x + 1)
+  }, [dep])
+
+  useEffect(() => {
+    if (count > 2) {
+      fn()
+      console.log('n: ' + dep)
+      console.log('count ' + count)
+      console.log('-----------')
+    }
+  }, [count, fn, dep])
 }
 
-export default App;
+const App = props => {
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    console.log('use effect')
+  }, [])
+
+  useUpdate(() => {
+    console.log('n changed')
+  }, n)
+
+  return (
+    <div>
+      n: {n}
+      <button onClick={() => setN(n + 1)}>+1</button>
+    </div>
+  )
+}
+
+export default App
